@@ -117,6 +117,15 @@
           })
         }
 
+// afficher le btn d'installation custom
+const installBtn = document.querySelector('.install')
+//on ajoute un écouteur d'évènement sur la window en entier
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault()
+  installBtn.classList.remove('hidden')
+  
+})
+
       </script>
 </body>
 </html>
