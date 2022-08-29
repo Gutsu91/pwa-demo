@@ -1,5 +1,6 @@
 // on consigne un numéro de version. Ca permet aussi que tant qu'on ne met pas à jour manuellement ce numéro, on ne demande pas au navigateur de changer le service worker. Si on change la version, le navigateur sait qu'il doit "réinstaller le service worker"
-const version = '1.03'
+const version = '1.04'
+// c'est mieux que ça corresponde au numero de version config dans le service worker
 
 //la première fois qu'on lance le fichier il va s'installer, et on écoute cet évènement pour afficher un message dans la console (uniquement à l'installation du SW)
 self.addEventListener('install', () => {
