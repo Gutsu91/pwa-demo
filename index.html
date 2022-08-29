@@ -119,11 +119,29 @@
 
 // afficher le btn d'installation custom
 const installBtn = document.querySelector('.install')
+let deferredPrompt; // on déclare une propriété vide qui est GLOBALE pour qu'on puisse la nourrir dans un eventListener scopé
 //on ajoute un écouteur d'évènement sur la window en entier
 window.addEventListener('beforeinstallprompt', ev => {
-  ev.preventDefault()
+  ev.preventDefault() //désactive le bouton d'installation SUR NAVIGATEUR MOBILE, pas dans chrome browser
+  deferredPrompt = ev
+  // on stock l'évènement de window dans deferredPrompt
   installBtn.classList.remove('hidden')
+})
+
+installBtn.addEventListener('click', ev => {
+  installBtn.classList.add('hidden')
+  deferredPrompt.prompt() // on déclenche l'évènement qu'on avait prevent dans le eventListenner. On prend la main
+  deferredPrompt.userChoice.then(choice => {
+    // on ajoute une promesse sur l'userchoice de deferredprompt
+    if (choice === 'accepted') { //si l'utilisateur accepte l'installation
+      console.log("Installation acceptée")
+    } else {
+      console.log("Installation refusée")
+    }
+    defferedPrompt = null
+  })
   
+
 })
 
       </script>
