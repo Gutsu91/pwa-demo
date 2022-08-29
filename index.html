@@ -131,11 +131,12 @@ window.addEventListener('beforeinstallprompt', ev => {
 installBtn.addEventListener('click', ev => {
   installBtn.classList.add('hidden')
   deferredPrompt.prompt() // on déclenche l'évènement qu'on avait prevent dans le eventListenner. On prend la main
+  installBtn.classList.add('remove')
   deferredPrompt.userChoice.then(choice => {
     // on ajoute une promesse sur l'userchoice de deferredprompt
     if (choice === 'accepted') { //si l'utilisateur accepte l'installation
       console.log("Installation acceptée")
-    } else {
+    } else if (choice === 'cancelled') {
       console.log("Installation refusée")
     }
     defferedPrompt = null
