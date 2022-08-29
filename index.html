@@ -101,6 +101,22 @@
       </footer>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
       <script src="main.js"></script>
-      
+      <script>
+        // On fait un test pour vérifier que le navigateur gère le principe du service worker
+        if('serviceWorker' in navigator) {
+          //est-ce que cette méthode existe dans le navigateur
+          //nb: navigator contient window par exemple, ou document
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+            // au chargement de la fenetre, on enregistre service-worker.js dans serviceWorker
+            // c'est plutot lent et ça renvoie une promise :
+            .then((reg) => {
+              console.log('Notify', 'service worker is started @ scope ' + reg.scope)
+            })
+            .catch((e) => {console.log('alert','Service worker registration failed with ' + e)})
+          })
+        }
+
+      </script>
 </body>
 </html>
