@@ -91,7 +91,7 @@ const fromCacheFirst = (
 
 //au lieu de faire le getter et si le getter ne marche pas faire le fetch, on fait le fetch et SI le fetch ne marche pas on check le cache
 const fromNetworkFirst = (cacheName, request) => {
-  return fetch(request)
+  fetch(request)
   .then(response => {
     if(response) {
       setResponseCache(cacheName, request, response.clone())
@@ -100,6 +100,8 @@ const fromNetworkFirst = (cacheName, request) => {
       const responseCache = getResponseFromCache(cacheName, request)
       return responseCache
   }})
+  .catch(e => console.log(e))
+  return response
 }
 
 self.addEventListener("fetch", ev => {
@@ -110,7 +112,7 @@ self.addEventListener("fetch", ev => {
   )
   console.log(requestedUrl.pathname)
   //on intercepte cette requête et on applique la strat fromCacheFirst
-  if(requestedUrl.pathname.startsWith('/assets')) { // si le chemin de l'url de la requête commence par assets
+  if(requestedUrl.pathname.startsWith('/assets') || requestedUrl.pathname.includes('.css') || requestedUrl.pathname.includes('.js') || requestedUrl.pathname.includes('.html') || requestedUrl.pathname.includes('.png')) { // si le chemin de l'url de la requête commence par assets
     //alors l'ev de la requête doit répondre avec le résultat de la méthode fromCacheFirst
       ev.respondWith(fromCacheFirst(ASSETS_CACHE_NAME, ev.request))
       //du coup ICI on renvoie au navigateur avec le résultat de la stratégie
