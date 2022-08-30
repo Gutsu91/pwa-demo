@@ -1,7 +1,7 @@
 {
   "name": "Trains au départ",
   "short_name" : "SNCB",
-  "version": "1.04",
+  "version": "2.00",
   "start_url" : "/",
   "theme_color": "#a85232",
   "background_color" : "#444",
