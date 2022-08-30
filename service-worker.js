@@ -34,6 +34,7 @@ Ensuite si on veut on le pousse sur github, on le lie à netlify, du coup si on 
 
 // définition d'un cache pour les assets (on pourrait en avoir un pour les scripts, un pour les htmls, ...)
 const ASSETS_CACHE_NAME = "assets"
+const API_CACHE_NAME = "stations"
 
 // création de 2 méthodes: une getter pour récup le cache et une setter pour mettre dans le cache. Attention ici on les défini seulement, faudra les utiliser plus tard
 // le getter
@@ -88,6 +89,19 @@ const fromCacheFirst = (
   return response // on re-renvoie la réponse au fetch
 }
 
+//au lieu de faire le getter et si le getter ne marche pas faire le fetch, on fait le fetch et SI le fetch ne marche pas on check le cache
+const fromNetworkFirst = (cacheName, request) => {
+  return fetch(request)
+  .then(response => {
+    if(response) {
+      setResponseCache(cacheName, request, response.clone())
+      return response
+    } else {
+      const responseCache = getResponseFromCache(cacheName, request)
+      return responseCache
+  }})
+}
+
 self.addEventListener("fetch", ev => {
   //c'est ce qu'on faisait dans le simple fetch en ligne ~20, sauf qu'on ne faisait rien de particulier. Ici on se met en écoute mais on utilise notre requête!
   // chaque fois que le navigateur fait une requête on récupère cette url
@@ -100,5 +114,7 @@ self.addEventListener("fetch", ev => {
     //alors l'ev de la requête doit répondre avec le résultat de la méthode fromCacheFirst
       ev.respondWith(fromCacheFirst(ASSETS_CACHE_NAME, ev.request))
       //du coup ICI on renvoie au navigateur avec le résultat de la stratégie
+  } else if(requestedUrl.pathname.startsWith('/station')) {
+    ev.respondWith(fromNetworkFirst(API_CACHE_NAME, ev.request))
   }
 })
